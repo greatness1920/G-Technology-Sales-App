@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../services/firestore_service.dart';
 import '../widgets/item_name_autocomplete.dart';
-
+import '../widgets/comments_sheet.dart';
 
 class StockInScreen extends StatefulWidget {
   final UserModel user;
@@ -44,6 +45,25 @@ class _StockInScreenState extends State<StockInScreen> {
       );
       _showSnack('Stock In recorded successfully!');
       _clearForm();
+
+      // After recording stock in, offer to add a comment
+      if (mounted) {
+        final latestDoc = await FirebaseFirestore.instance
+            .collection('stock_in')
+            .orderBy('createdAt', descending: true)
+            .limit(1)
+            .get();
+        if (latestDoc.docs.isNotEmpty && mounted) {
+          CommentsSheet.show(
+            context,
+            transactionId: latestDoc.docs.first.id,
+            transactionInfo:
+            'Stock In — ${latestDoc.docs.first.data()['itemName']}',
+            collection: 'stock_in',
+            user: widget.user,
+          );
+        }
+      }
     } catch (e) {
       _showSnack('Error: Check your inputs', isError: true);
     } finally {

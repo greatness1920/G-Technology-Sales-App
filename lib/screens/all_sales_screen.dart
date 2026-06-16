@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../models/user_model.dart';
 import 'stock_in_screen.dart';
+import '../widgets/comments_sheet.dart';
 
 class AllSalesTab extends StatefulWidget {
   final UserModel user;
@@ -500,14 +501,40 @@ class _AllSalesTabState extends State<AllSalesTab> {
                                   ]),
                                 ],
                               ),
-                              trailing: Text(
-                                _currency.format(
-                                    d['totalAmount'] ?? 0),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green,
-                                  fontSize: 14,
-                                ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    _currency.format(d['totalAmount'] ?? 0),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => CommentsSheet.show(
+                                      context,
+                                      transactionId: docs[i].id,
+                                      transactionInfo:
+                                      '${d['itemName']} • ${d['date']}',
+                                      collection: 'sales',
+                                      user: widget.user,
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.comment_outlined,
+                                            size: 14, color: Colors.grey),
+                                        SizedBox(width: 3),
+                                        Text('comment',
+                                            style: TextStyle(
+                                                fontSize: 10, color: Colors.grey)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                               isThreeLine: true,
                             ),

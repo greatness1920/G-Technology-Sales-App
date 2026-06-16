@@ -41,8 +41,10 @@ class AuthService {
     final user = _auth.currentUser;
     if (user == null) return null;
     try {
-      final doc =
-      await _firestore.collection('users').doc(user.uid).get();
+      final doc = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
       if (doc.exists) {
         return UserModel.fromMap(doc.data()!, user.uid);
       }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../services/firestore_service.dart';
 import 'stock_in_screen.dart';
 import '../widgets/item_name_autocomplete.dart';
-
-
+import '../widgets/comments_sheet.dart';
 
 class SalesEntryScreen extends StatefulWidget {
   final UserModel user;
@@ -48,6 +48,25 @@ class _SalesEntryScreenState extends State<SalesEntryScreen> {
       );
       _showSnack('Sale recorded successfully!');
       _clearForm();
+
+      // After recording the sale, offer to add a comment
+      if (mounted) {
+        final latestDoc = await FirebaseFirestore.instance
+            .collection('sales') // ← correct collection
+            .orderBy('createdAt', descending: true)
+            .limit(1)
+            .get();
+        if (latestDoc.docs.isNotEmpty && mounted) {
+          CommentsSheet.show(
+            context,
+            transactionId: latestDoc.docs.first.id,
+            transactionInfo:
+            'Sale — ${latestDoc.docs.first.data()['itemName']}',
+            collection: 'sales', // ← correct collection
+            user: widget.user,
+          );
+        }
+      }
     } catch (e) {
       _showSnack('Error: Check your inputs', isError: true);
     } finally {
