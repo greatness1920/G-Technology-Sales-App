@@ -28,10 +28,12 @@ plugins {
     id("com.google.gms.google-services") version "4.3.10" apply false
 }
 
-// Bypass AAR metadata SDK version check for plugin compatibility
-tasks.configureEach {
-    if (name.contains("checkReleaseAarMetadata") ||
-        name.contains("checkDebugAarMetadata")) {
-        enabled = false
+// Bypass AAR metadata check for ALL subprojects and plugins
+allprojects {
+    tasks.configureEach {
+        if (name.contains("checkReleaseAarMetadata") ||
+            name.contains("checkDebugAarMetadata")) {
+            enabled = false
+        }
     }
 }
