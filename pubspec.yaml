@@ -9,18 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.24.0
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.14.0
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.0
+  cloud_firestore: ^5.4.0
   intl: ^0.19.0
   provider: ^6.1.1
   google_fonts: ^6.1.0
-  excel: ^4.0.6               # ADD THIS
-#  file_picker: ^9.0.0         # ADD THIS
-  share_plus: ^7.2.1          # ADD THIS
-  http: ^1.1.0                # ADD THIS (for Google Sheets sync)
-  flutter_native_splash: ^2.3.2    # ADD THIS
-  path_provider: ^2.1.5             # ADD THIS
+  excel: ^4.0.6
+  share_plus: ^7.2.2
+  http: ^1.1.0
+  flutter_native_splash: ^2.3.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
