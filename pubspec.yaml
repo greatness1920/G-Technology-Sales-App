@@ -16,7 +16,7 @@ dependencies:
   provider: ^6.1.1
   google_fonts: ^6.1.0
   excel: ^4.0.6               # ADD THIS
-  file_picker: ^9.0.0         # ADD THIS
+#  file_picker: ^9.0.0         # ADD THIS
   share_plus: ^7.2.1          # ADD THIS
   http: ^1.1.0                # ADD THIS (for Google Sheets sync)
   flutter_native_splash: ^2.3.2    # ADD THIS

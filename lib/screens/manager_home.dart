@@ -11,6 +11,7 @@ import 'returns_screen.dart';
 import 'inventory_screen.dart';
 import 'all_sales_screen.dart';
 import 'daily_report_screen.dart';
+import 'all_records_screen.dart';
 
 class ManagerHome extends StatefulWidget {
   final UserModel user;
@@ -56,8 +57,7 @@ class _ManagerHomeState extends State<ManagerHome> {
             ),
             const Text(
               'G-Technology Sales Tracker',
-              style:
-              TextStyle(fontSize: 10, color: Colors.white54),
+              style: TextStyle(fontSize: 10, color: Colors.white54),
             ),
           ],
         ),
@@ -115,8 +115,7 @@ class _ManagerHomeState extends State<ManagerHome> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Sign Out'),
-        content:
-        const Text('Are you sure you want to sign out?'),
+        content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -227,8 +226,7 @@ class _DashboardTab extends StatelessWidget {
               double cash = 0, pos = 0, transfer = 0;
               if (snap.hasData) {
                 for (var doc in snap.data!.docs) {
-                  final d =
-                  doc.data() as Map<String, dynamic>;
+                  final d = doc.data() as Map<String, dynamic>;
                   final amt =
                   (d['totalAmount'] as num? ?? 0).toDouble();
                   if (d['paymentMethod'] == 'Cash') cash += amt;
@@ -274,6 +272,54 @@ class _DashboardTab extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: 12),
+
+          // All Records — Manager Delete Access
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => AllRecordsScreen(user: user)),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.red.shade200),
+              ),
+              child: Row(children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(Icons.delete_sweep_outlined,
+                      color: Colors.red.shade700, size: 24),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('All Records',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red.shade700)),
+                      const Text(
+                          'Delete Sales, Stock In, Returns & Verification',
+                          style: TextStyle(
+                              color: Colors.grey, fontSize: 12)),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios,
+                    color: Colors.red.shade300, size: 16),
+              ]),
+            ),
+          ),
           const SizedBox(height: 24),
 
           // Recent sales
@@ -304,8 +350,7 @@ class _DashboardTab extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: docs.length,
                 itemBuilder: (context, i) {
-                  final d =
-                  docs[i].data() as Map<String, dynamic>;
+                  final d = docs[i].data() as Map<String, dynamic>;
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
@@ -335,8 +380,7 @@ class _DashboardTab extends StatelessWidget {
           const Center(
             child: Text(
               'Powered by PRIMENOVA GLOBAL',
-              style:
-              TextStyle(color: Colors.grey, fontSize: 11),
+              style: TextStyle(color: Colors.grey, fontSize: 11),
             ),
           ),
           const SizedBox(height: 16),
@@ -347,7 +391,7 @@ class _DashboardTab extends StatelessWidget {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TAB 2: STOCK (Stock In + Verify — with internal toggle)
+// TAB 2: STOCK
 // ═══════════════════════════════════════════════════════════
 
 class _StockTab extends StatefulWidget {
@@ -365,14 +409,12 @@ class _StockTabState extends State<_StockTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Sub-tab toggle
         _SubTabBar(
           options: ['Stock In', 'Verify Stock'],
           selectedIndex: _subIndex,
           onChanged: (i) => setState(() => _subIndex = i),
           activeColor: const Color(0xFF1565C0),
         ),
-        // Content
         Expanded(
           child: IndexedStack(
             index: _subIndex,
@@ -389,7 +431,7 @@ class _StockTabState extends State<_StockTab> {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TAB 4: SALES (New Sale + Returns + All Records — toggle)
+// TAB 4: SALES
 // ═══════════════════════════════════════════════════════════
 
 class _SalesTab extends StatefulWidget {
@@ -407,14 +449,12 @@ class _SalesTabState extends State<_SalesTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Sub-tab toggle
         _SubTabBar(
           options: ['New Sale', 'Returns', 'All Records'],
           selectedIndex: _subIndex,
           onChanged: (i) => setState(() => _subIndex = i),
           activeColor: Colors.green.shade700,
         ),
-        // Content
         Expanded(
           child: IndexedStack(
             index: _subIndex,
@@ -435,7 +475,6 @@ class _SalesTabState extends State<_SalesTab> {
 // SHARED WIDGETS
 // ═══════════════════════════════════════════════════════════
 
-// Sub-tab toggle bar (used inside Stock and Sales tabs)
 class _SubTabBar extends StatelessWidget {
   final List<String> options;
   final int selectedIndex;
@@ -464,7 +503,8 @@ class _SubTabBar extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(
                     right: i < options.length - 1 ? 8 : 0),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding:
+                const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: selected
                       ? activeColor
